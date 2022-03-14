@@ -4,6 +4,13 @@
 
 package gsa
 
+import (
+	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
+)
+
 // Expand the compressed CIGAR encoding into the full list of edits.
 //
 //  Args:
@@ -11,9 +18,20 @@ package gsa
 //
 //  Returns:
 //      The edit operations the CIGAR string describes.
-func CigarToEdits(cigar string) (edits string) {
-	edits = ""
-	return edits
+func CigarToEdits(cigar string) string {
+	r := regexp.MustCompile(`\d+[MID]`)
+	edits := []byte{}
+
+	for _, op := range r.FindAllString(cigar, -1) {
+		repeats, _ := strconv.Atoi(op[:len(op)-1])
+		opcode := op[len(op)-1]
+
+		for i := 0; i < repeats; i++ {
+			edits = append(edits, opcode)
+		}
+	}
+
+	return string(edits)
 }
 
 // Encode a sequence of edits as a CIGAR.
@@ -23,7 +41,18 @@ func CigarToEdits(cigar string) (edits string) {
 //
 //  Returns:
 //      The CIGAR encoding of edits.
-func EditsToCigar(edits string) (cigar string) {
-	cigar = ""
-	return cigar
+func EditsToCigar(edits string) string {
+	var (
+		res  = []string{}
+		i, j int
+	)
+
+	for ; i < len(edits); i = j {
+		for j = i + 1; j < len(edits) && edits[i] == edits[j]; j++ {
+		}
+
+		res = append(res, fmt.Sprintf("%d%s", j-i, string(edits[i])))
+	}
+
+	return strings.Join(res, "")
 }

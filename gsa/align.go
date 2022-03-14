@@ -14,9 +14,7 @@ package gsa
 //  Returns:
 //      The two rows in the pairwise alignment
 func Align(p, q, edits string) (pRow, qRow string) {
-	pRow, qRow = "", ""
-	// Align p and q based on edits
-	return pRow, qRow
+	return LocalAlign(p, q, 0, edits)
 }
 
 // Align two sequences from a sequence of edits.
@@ -30,7 +28,26 @@ func Align(p, q, edits string) (pRow, qRow string) {
 //  Returns:
 //      The two rows in the pairwise alignment
 func LocalAlign(p, x string, i int, edits string) (pRow, xRow string) {
-	pRow, xRow = "", ""
-	// Align p and q based on edits
-	return pRow, xRow
+	pr := make([]byte, len(edits))
+	xr := make([]byte, len(edits))
+	j, k := 0, 0
+	for l, e := range edits {
+		switch e {
+		case 'M':
+			pr[l] = p[j]
+			xr[l] = x[i+k]
+			j++
+			k++
+		case 'D':
+			pr[l] = p[j]
+			xr[l] = '-'
+			j++
+
+		case 'I':
+			pr[l] = '-'
+			xr[l] = x[i+k]
+			k++
+		}
+	}
+	return string(pr), string(xr)
 }
