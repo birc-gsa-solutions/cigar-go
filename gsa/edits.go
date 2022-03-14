@@ -49,5 +49,23 @@ func GetEdits(p, q string) (gapFreeP, gapFreeQ, edits string) {
 //  Returns:
 //      The distance from p to x[i:?] described by edits
 func EditDist(p, x string, i int, edits string) int {
-	return -1
+	j, dist := 0, 0
+	for k := 0; k < len(edits); k++ {
+		switch edits[k] {
+		case 'I':
+			dist++
+			i++
+		case 'D':
+			dist++
+			j++
+		case 'M':
+			if x[i] != p[j] {
+				dist++
+			}
+			i++
+			j++
+		}
+	}
+
+	return dist
 }
