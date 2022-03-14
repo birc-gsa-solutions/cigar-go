@@ -36,3 +36,18 @@ func GetEdits(p, q string) (gapFreeP, gapFreeQ, edits string) {
 	gapFreeQ = strings.ReplaceAll(q, "-", "")
 	return gapFreeP, gapFreeQ, string(edits_buf)
 }
+
+//  Get the distance between p and the string that starts at x[i:]
+//  using the edits.
+//
+//  Args:
+//      p: The read string we have mapped against x
+//      x: The longer string we have mapped against
+//      i: The location where we have an approximative match
+//      edits: The list of edits to apply, given as a string
+//
+//  Returns:
+//      The distance from p to x[i:?] described by edits
+func EditDist(p, x string, i int, edits string) int {
+	return -1
+}

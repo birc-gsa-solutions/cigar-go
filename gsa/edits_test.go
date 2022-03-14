@@ -11,6 +11,11 @@ func ExampleGetEdits() {
 	// Output: ACCACAGTCATA ACAGAGTACAAA MDMMMMMMIMMMM
 }
 
+func ExampleEditDist() {
+	fmt.Println(EditDist("accaaagta", "cgacaaatgtcca", 2, "MDMMIMMMMIIM"))
+	// Output: 5
+}
+
 func TestGetEdits(t *testing.T) {
 	type args struct {
 		p string
@@ -50,4 +55,37 @@ func TestGetEdits(t *testing.T) {
 		})
 	}
 
+}
+
+func TestEditDist(t *testing.T) {
+	type args struct {
+		p     string
+		x     string
+		i     int
+		edits string
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		// TODO: Add test cases.
+		{
+			"Test 1",
+			args{"accaaagta", "cgacaaatgtcca", 2, "MDMMIMMMMIIM"},
+			5,
+		},
+		{
+			"Test 2",
+			args{"acgttcga", "aaaaa", 0, "MMMDDDMM"},
+			6,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := EditDist(tt.args.p, tt.args.x, tt.args.i, tt.args.edits); got != tt.want {
+				t.Errorf("EditDist() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
